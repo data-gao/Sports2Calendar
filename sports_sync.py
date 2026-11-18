@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sports2Calendar - Sports Broadcast to iCalendar & Notification Sync Tool
+Sports2Calendar - Sports Broadcast to iCalendar & Google Calendar Sync Tool
 """
 
 import sys
@@ -37,7 +37,6 @@ def format_ics_date(dt_str):
     try:
         dt = datetime.datetime.fromisoformat(dt_str)
     except Exception:
-        # Fallback if no seconds
         dt = datetime.datetime.strptime(dt_str[:16], "%Y-%m-%dT%H:%M")
     return dt.strftime("%Y%m%dT%H%M%S")
 
@@ -45,10 +44,10 @@ def export_ics(events):
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        "PRODID:-//Antigravity//Sports2Calendar//CN",
+        "PRODID:-//Sports2Calendar//Sports Schedule//EN",
         "CALSCALE:GREGORIAN",
         "METHOD:PUBLISH",
-        "X-WR-CALNAME:体育赛事转播日程",
+        "X-WR-CALNAME:Sports Broadcast Schedule",
         "X-WR-TIMEZONE:Europe/Berlin"
     ]
 
@@ -60,7 +59,7 @@ def export_ics(events):
         end_ics = format_ics_date(ev.get("end_time") or ev["start_time"])
         
         summary = f"[{ev['broadcaster']}] {ev['title']}"
-        desc = f"赛事: {ev.get('competition', '')}\\n转播平台: {ev['broadcaster']}\\n详情: {ev.get('details', '')}"
+        desc = f"Competition: {ev.get('competition', '')}\\nBroadcaster: {ev['broadcaster']}\\nDetails: {ev.get('details', '')}"
 
         lines.extend([
             "BEGIN:VEVENT",
@@ -75,7 +74,7 @@ def export_ics(events):
             "BEGIN:VALARM",
             "TRIGGER:-PT30M",
             "ACTION:DISPLAY",
-            f"DESCRIPTION:赛事开赛提醒: {summary}",
+            f"DESCRIPTION:Match Reminder: {summary}",
             "END:VALARM",
             "END:VEVENT"
         ])
@@ -86,7 +85,7 @@ def export_ics(events):
         f.write("\r\n".join(lines) + "\r\n")
 
 def send_notification(title, message):
-    # Try AppleScript notification if outside sandbox
+    # Desktop notification fallback (macOS osascript)
     try:
         script = f'display notification "{message}" with title "{title}"'
         subprocess.run(["osascript", "-e", script], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -94,9 +93,9 @@ def send_notification(title, message):
         pass
 
 def sync_to_google_calendar(ev):
-    calendar_id = "368d686b0d872d1813a5e5ed87a809ad0e4791fa32b54859f620deab5a31747d@group.calendar.google.com"
+    calendar_id = os.environ.get("GOOGLE_CALENDAR_ID", "primary")
     summary = f"[{ev['broadcaster']}] {ev['title']}"
-    desc = f"赛事: {ev.get('competition', '')}\n转播平台: {ev['broadcaster']}\n详情: {ev.get('details', '')}"
+    desc = f"Competition: {ev.get('competition', '')}\nBroadcaster: {ev['broadcaster']}\nDetails: {ev.get('details', '')}"
     
     # Format RFC3339 with timezone offset
     st = ev['start_time'].replace(" ", "T")
@@ -119,18 +118,19 @@ def sync_to_google_calendar(ev):
     try:
         res = subprocess.run(cmd, capture_output=True, text=True, check=False)
         if res.returncode == 0:
-            print(f"[GOOGLE CALENDAR] 同步成功: {summary}")
+            print(f"[GOOGLE CALENDAR] Successfully synced: {summary}")
         else:
-            # If failed, try primary calendar
-            cal_idx = cmd.index("--cal")
-            cmd[cal_idx + 1] = "primary"
-            res_primary = subprocess.run(cmd, capture_output=True, text=True, check=False)
-            if res_primary.returncode == 0:
-                print(f"[GOOGLE CALENDAR] 同步成功 (Primary): {summary}")
-            else:
-                print(f"[GOOGLE CALENDAR] 同步错误: {res.stderr or res.stdout}")
+            # If specified calendar fails and was not primary, fallback to primary
+            if calendar_id != "primary":
+                cal_idx = cmd.index("--cal")
+                cmd[cal_idx + 1] = "primary"
+                res_primary = subprocess.run(cmd, capture_output=True, text=True, check=False)
+                if res_primary.returncode == 0:
+                    print(f"[GOOGLE CALENDAR] Successfully synced (Primary): {summary}")
+                    return
+            print(f"[GOOGLE CALENDAR] Sync error: {res.stderr or res.stdout}")
     except Exception as e:
-        print(f"[GOOGLE CALENDAR] 异常: {e}")
+        print(f"[GOOGLE CALENDAR] Exception: {e}")
 
 def add_event(title, competition, broadcaster, start_time, end_time="", details=""):
     events = load_events()
@@ -139,11 +139,11 @@ def add_event(title, competition, broadcaster, start_time, end_time="", details=
     # Check if already exists
     for ev in events:
         if ev.get("uid") == uid:
-            print(f"[EXISTS] 比赛已在日程中: {title} ({broadcaster})")
+            print(f"[EXISTS] Event already scheduled: {title} ({broadcaster})")
             return False
 
     if not end_time:
-        # Default duration 2.5 hours
+        # Default duration: 2.5 hours
         try:
             st = datetime.datetime.fromisoformat(start_time.replace(" ", "T"))
             et = st + datetime.timedelta(hours=2.5)
@@ -164,17 +164,17 @@ def add_event(title, competition, broadcaster, start_time, end_time="", details=
     events.append(new_ev)
     save_events(events)
     export_ics(events)
-    print(f"[ADDED] 成功添加赛事日程: {title} | 转播: {broadcaster} | 时间: {start_time}")
-    send_notification("新赛事转播提醒", f"[{broadcaster}] {title} ({start_time})")
+    print(f"[ADDED] Successfully added event: {title} | Broadcaster: {broadcaster} | Time: {start_time}")
+    send_notification("New Sports Broadcast Reminder", f"[{broadcaster}] {title} ({start_time})")
     sync_to_google_calendar(new_ev)
     return True
 
 def list_events():
     events = load_events()
     if not events:
-        print("当前没有任何已记录的赛事日程。")
+        print("No scheduled sports events found.")
         return
-    print(f"当前共记录 {len(events)} 场比赛:")
+    print(f"Total scheduled events: {len(events)}")
     for i, ev in enumerate(events, 1):
         print(f"{i}. [{ev['broadcaster']}] {ev['title']} ({ev.get('competition', '')}) - {ev['start_time']}")
 
@@ -183,6 +183,7 @@ if __name__ == "__main__":
         print("Usage:")
         print("  python3 sports_sync.py list")
         print("  python3 sports_sync.py add <title> <competition> <broadcaster> <start_time> [end_time] [details]")
+        print("  python3 sports_sync.py export")
         sys.exit(1)
 
     cmd = sys.argv[1]
@@ -202,6 +203,6 @@ if __name__ == "__main__":
     elif cmd == "export":
         events = load_events()
         export_ics(events)
-        print(f"已导出到 {CALENDAR_FILE}")
+        print(f"Exported to {CALENDAR_FILE}")
     else:
         print(f"Unknown command: {cmd}")

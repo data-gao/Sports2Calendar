@@ -1,21 +1,98 @@
-# Sports2Calendar 赛事转播自动监控与日历同步
+# Sports2Calendar
 
-每天上午 10:00 自动检索以下赛事的转播计划并同步至 Google Calendar（**Sports_Live** 日历）与本地 iCalendar 文件：
-1. **NBA** (Amazon Prime Video、CCTV-5)
-2. **德国国家男子足球队** (ARD / Das Erste、ZDF、CCTV-5)
-3. **UEFA Champions League 欧洲冠军联赛** (Amazon Prime Video 独家周二、ZDF 集锦/决赛、CCTV-5)
-4. **欧洲五大联赛（英超、西甲、德甲、意甲、法甲）CCTV-5 / 央视体育转播信息**
+> Automated sports broadcast schedule tracking, iCalendar (.ics) generation, and Google Calendar sync.
 
-## 监控平台
+Sports2Calendar aggregates live sports broadcast schedules across key platforms and leagues, maintains a deduplicated event database, exports standard iCalendar files, and synchronizes match events directly to Google Calendar with customizable reminders.
 
-- **Amazon Prime Video** (德区独家欧冠周二焦点战、NBA Cup 黄金档及周五双重赛)
-- **德国公共电视台免费频道** (ARD / Das Erste、ZDF 德国男足赛事、欧冠决赛及全景精华)
-- **CCTV-5 / CCTV-5+ / 央视体育** (NBA、欧洲五大联赛实况直播与录像集锦)
+---
 
-## 核心配置与文件
+## 🏆 Supported Competitions & Channels
 
-- **目标日历**：Google Calendar `Sports_Live`
-  - Calendar ID: `368d686b0d872d1813a5e5ed87a809ad0e4791fa32b54859f620deab5a31747d@group.calendar.google.com`
-- `sports_sync.py`: 赛事同步工具，自动生成本地 `.ics` 并通过 `gcalendar` 直接推送到 Google Calendar 的 `Sports_Live` 日历中。
-- `sports_schedule.ics`: 本地 iCalendar 格式文件（含开赛前 30 分钟提醒）。
-- `events_data.json`: 本地去重数据库。
+- **NBA**: Regular season & Emirates NBA Cup games (Amazon Prime Video, CCTV-5)
+- **UEFA Champions League**: Tuesday marquee matches, official highlights, and finals (Amazon Prime Video DE, ZDF sportstudio, CCTV-5)
+- **European Top Leagues**: Premier League, La Liga, Bundesliga, Serie A, Ligue 1 highlights & live broadcasts
+- **National Team Tournaments**: UEFA Nations League, World Cup Qualifiers (ARD / Das Erste, ZDF)
+
+### Monitored Platforms
+- **Amazon Prime Video** (DE & International Prime sports coverage)
+- **German Public Broadcasters** (ARD / Das Erste, ZDF sportstudio)
+- **Sports Television Channels** (CCTV-5 / CCTV-5+ / CCTV Sports)
+
+---
+
+## 📦 Features
+
+- **iCalendar (.ics) Export**: Generates RFC 5545 compliant `.ics` calendar files, compatible with Apple Calendar, Google Calendar, Outlook, and mobile devices.
+- **Automated Alarms**: Configures pre-match alarm triggers (default 30 minutes before kickoff) for notifications.
+- **Google Calendar Sync**: Integrates with Google Calendar (`gcalendar` CLI or API) to sync events seamlessly into designated calendars.
+- **Deduplication Engine**: Uses cryptographic hashing (`MD5(title + start_time + broadcaster)`) to prevent duplicate entries across runs.
+- **Desktop Alerts**: Triggers native desktop notifications on macOS / Linux upon scheduling new matches.
+
+---
+
+## 📁 Project Structure
+
+```text
+.
+├── sports_sync.py        # Core CLI & synchronization tool
+├── events_data.json      # Local deduplicated events database
+├── sports_schedule.ics   # Exported standard iCalendar file
+├── .env.example          # Environment configuration template
+└── README.md             # Project documentation
+```
+
+---
+
+## 🚀 Quick Start
+
+### 1. Prerequisites
+
+- Python 3.8+
+- (Optional) `gcalendar` CLI configured if syncing to Google Calendar.
+
+### 2. Configuration
+
+Copy `.env.example` to `.env` or set the environment variable:
+
+```bash
+cp .env.example .env
+export GOOGLE_CALENDAR_ID="your-calendar-id@group.calendar.google.com"
+```
+
+> **Note**: If `GOOGLE_CALENDAR_ID` is omitted, it defaults to your `primary` Google Calendar.
+
+### 3. Usage
+
+#### List Scheduled Events
+```bash
+python3 sports_sync.py list
+```
+
+#### Add a New Match Event
+```bash
+python3 sports_sync.py add \
+  "Germany vs. Netherlands" \
+  "UEFA Nations League" \
+  "ARD (Das Erste)" \
+  "2026-11-20T20:45:00" \
+  "2026-11-20T23:15:00" \
+  "UEFA Nations League matchday fixture"
+```
+
+#### Re-export iCalendar (.ics)
+```bash
+python3 sports_sync.py export
+```
+
+---
+
+## 🗓 Importing to Your Calendar
+
+- **Apple Calendar / Outlook**: Double-click or open `sports_schedule.ics` to subscribe or import.
+- **Google Calendar**: Go to Google Calendar Settings -> *Import & Export* -> Select `sports_schedule.ics` -> Choose target calendar -> *Import*.
+
+---
+
+## 📄 License
+
+MIT License. See [LICENSE](LICENSE) for details.

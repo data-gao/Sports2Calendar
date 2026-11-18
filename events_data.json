@@ -1,92 +1,92 @@
 [
   {
     "uid": "0e2ae235e987035337ecf1a4d015fd3c@sports2calendar",
-    "title": "德国 vs 荷兰 (UEFA Nations League)",
-    "competition": "德国国家男子足球队",
+    "title": "Germany vs. Netherlands (UEFA Nations League)",
+    "competition": "Germany National Football Team",
     "broadcaster": "ARD (Das Erste)",
     "start_time": "2026-11-16T20:45:00",
     "end_time": "2026-11-16T23:15:00",
-    "details": "欧国联焦点战，德国公共电视台 ARD Das Erste 现场直播",
+    "details": "UEFA Nations League marquee fixture, live broadcast on ARD Das Erste",
     "created_at": "2026-11-16T16:30:26.453208"
   },
   {
     "uid": "22f784ff1ff56a6e005df2b6ca0000ba@sports2calendar",
-    "title": "阿森纳 vs 多特蒙德 (UEFA Champions League)",
+    "title": "Arsenal vs. Borussia Dortmund (UEFA Champions League)",
     "competition": "UEFA Champions League",
     "broadcaster": "Amazon Prime Video",
     "start_time": "2026-11-24T21:00:00",
     "end_time": "2026-11-24T23:30:00",
-    "details": "欧冠第5轮周二焦点对决，德国区 Amazon Prime Video 独家直播",
+    "details": "UEFA Champions League Matchday 5 marquee clash, exclusive live on Amazon Prime Video Germany",
     "created_at": "2026-11-16T16:32:39.027219"
   },
   {
     "uid": "ae76a2e7a8bd0247adad6c6e130954da@sports2calendar",
-    "title": "迈阿密热火 vs 纽约尼克斯 (NBA Cup 焦点战)",
+    "title": "Miami Heat vs. New York Knicks (NBA Cup)",
     "competition": "NBA",
     "broadcaster": "Amazon Prime Video",
     "start_time": "2026-11-27T21:00:00",
     "end_time": "2026-11-27T23:30:00",
-    "details": "NBA Cup 黑色星期五特别转播，Amazon Prime Video 独家直播",
+    "details": "NBA Cup Black Friday special broadcast, exclusive live on Amazon Prime Video",
     "created_at": "2026-11-16T16:40:58.485505"
   },
   {
     "uid": "cb1a3d84653d7fb757161bce84f039eb@sports2calendar",
-    "title": "洛杉矶湖人 vs 圣安东尼奥马刺 (NBA Cup)",
+    "title": "Los Angeles Lakers vs. San Antonio Spurs (NBA Cup)",
     "competition": "NBA",
     "broadcaster": "Amazon Prime Video",
     "start_time": "2026-11-27T23:30:00",
     "end_time": "2026-11-28T02:00:00",
-    "details": "NBA Cup 焦点对决，Amazon Prime Video 独家直播",
+    "details": "NBA Cup marquee matchup, live stream on Amazon Prime Video",
     "created_at": "2026-11-16T16:40:58.845597"
   },
   {
     "uid": "3a6809e3a2002527c6939cf38b75f735@sports2calendar",
-    "title": "欧冠第5轮全景精华集锦 (sportstudio)",
+    "title": "UEFA Champions League Matchday 5 Highlights (sportstudio)",
     "competition": "UEFA Champions League",
     "broadcaster": "ZDF",
     "start_time": "2026-11-25T23:00:00",
     "end_time": "2026-11-26T00:00:00",
-    "details": "ZDF 免费公共台 sportstudio 欧冠比赛日官方全场集锦与分析",
+    "details": "ZDF free-to-air sportstudio official UEFA Champions League matchday highlights and tactical analysis",
     "created_at": "2026-11-16T16:40:59.005014"
   },
   {
     "uid": "48d5feaaef9f8e808aa126a7e34b287e@sports2calendar",
-    "title": "多伦多猛龙 vs 底特律活塞 (Emirates NBA Cup)",
+    "title": "Toronto Raptors vs. Detroit Pistons (Emirates NBA Cup)",
     "competition": "NBA",
     "broadcaster": "Amazon Prime Video",
     "start_time": "2026-11-21T01:00:00+01:00",
     "end_time": "2026-11-21T03:30:00+01:00",
-    "details": "Emirates NBA Cup 比赛，Amazon Prime Video (German Broadcast, Included with Prime) 现场直播",
+    "details": "Emirates NBA Cup group game, live on Amazon Prime Video (Included with Prime DE)",
     "created_at": "2026-11-16T16:54:39.679631"
   },
   {
     "uid": "3c628bfd19d7944afcbae9153d5bc32c@sports2calendar",
-    "title": "休斯敦火箭 vs 丹佛掘金 (Emirates NBA Cup)",
+    "title": "Houston Rockets vs. Denver Nuggets (Emirates NBA Cup)",
     "competition": "NBA",
     "broadcaster": "Amazon Prime Video",
     "start_time": "2026-11-21T04:00:00+01:00",
     "end_time": "2026-11-21T06:30:00+01:00",
-    "details": "Emirates NBA Cup 双重赛第二场，Amazon Prime Video 独家直播",
+    "details": "Emirates NBA Cup double-header game 2, exclusive on Amazon Prime Video",
     "created_at": "2026-11-16T16:58:45.949947"
   },
   {
     "uid": "bf2634296bb53be7d6072b6db6a70324@sports2calendar",
-    "title": "明尼苏达森林狼 vs 波特兰开拓者",
+    "title": "Minnesota Timberwolves vs. Portland Trail Blazers",
     "competition": "NBA",
     "broadcaster": "CCTV-5",
     "start_time": "2026-11-18T02:00:00+01:00",
     "end_time": "2026-11-18T04:30:00",
-    "details": "NBA常规赛焦点战，CCTV-5现场直播（北京时间11月18日09:00）",
+    "details": "NBA Regular Season match, live broadcast on CCTV-5 (09:00 CST)",
     "created_at": "2026-11-17T10:43:44.936478"
   },
   {
     "uid": "54fdeeeb5bd4993a4cc531e948242c59@sports2calendar",
-    "title": "热那亚 vs AC米兰",
-    "competition": "意甲",
+    "title": "Genoa vs. AC Milan",
+    "competition": "Serie A",
     "broadcaster": "CCTV-5",
     "start_time": "2026-11-19T02:01:00+01:00",
     "end_time": "2026-11-19T04:31:00",
-    "details": "意甲第11轮焦点战，CCTV-5 实况录像（北京时间11月19日 09:01）",
+    "details": "Serie A Matchday 11 fixture, broadcast on CCTV-5 (09:01 CST)",
     "created_at": "2026-11-18T10:06:35.882096"
   }
 ]
